@@ -17,24 +17,45 @@ typedef struct {
 */
 Bigint *bigint_new(const char *text){
     if (!is_decimal_string(text)){
-        // NotAString
         return NULL;
     }
 
     Bigint *bigint = malloc(sizeof(Bigint));
     if (!bigint) {
-        // OutOfMemory
         return NULL;
     }
 
-    bigint->digits = text;
-    bigint->len = strlen(text);
+    int start = 0;
     if (text[0] == '-'){
-        bigint->sign = -1; // Negative
+        bigint->sign = -1;
+        start = 1;
     }
     else {
-        bigint->sign = 1; // Positive
+        bigint->sign = 1;
     }
+
+    while (text[start] == '0' && text[start+1] != '\0'){
+        start++;
+    }
+
+    int len = strlen(text) - start + 1;
+
+    char *digits = malloc(len * sizeof(char));
+    if (!digits) {
+        free(bigint);
+        return NULL;
+    }
+
+    for (int i = 0; i < len; i++){
+        if (i == len - 1){
+            digits[i] = '\0';
+            break;
+        }
+        digits[i] = text[start + i];
+    }
+
+    bigint->digits = digits;
+    bigint->len = len;
     return bigint;
 }
 
@@ -139,7 +160,7 @@ int main(int argc, char* argv[]){
         printf("%s\n", argv[i]);
     }
 
-    char* text = "-1232323";
+    char* text = "-00001232323";
     Bigint* bigint = bigint_new(text);
     if (bigint){
         for (int i = 0; i<strlen(bigint->digits); i++){
