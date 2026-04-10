@@ -41,9 +41,26 @@ Bigint *bigint_new(const char *text){
 /*
     Prints the Bigint
 */
-void bigint_print(const Bigint *n); // IAN
+void bigint_print(const Bigint *n); // IAN 
+    {
+    if (n == NULL) return;
+    
+    if (n->sign == -1) {
+        printf("-");
+    }
+    //opcion de claudio
+    for (int i = n->len - 1; i >= 0; i--) {
+        putchar('0' + n->digits[i]);
+    }
+    putchar('\n');
 
+    //opcion de copilot
+    // for (int i = n->len - 1; i >= 0; i--) {
+        //printf("%c", n->digits[i]);
+    //}
+    }
 /* 
+
     Frees the memory of a Bigint
 */
 void bigint_free(Bigint *n); // EDU
@@ -52,7 +69,33 @@ void bigint_free(Bigint *n); // EDU
     Calculates the addition between two Bigints
 */
 Bigint *bigint_add(const Bigint *a, const Bigint *b); // IAN
+    {
+    int max_len = bigint_max_len(a, b);
+    Bigint *result = malloc(sizeof(Bigint));
+    if (result == NULL) return NULL; // OutOfMemory
 
+    // +2: un digito extra por acarreo final, +1 por e '\0' por si acaso
+    result->digits = malloc(max_len + 2);
+    if (!result->digits) {
+        free(result);
+        return NULL; // OutOfMemory
+    }
+
+    result ->sign = 1;
+
+    int carry = 0;
+    int i;
+    for (i = 0; i < max_len || carry; i++) {
+        int suma = (int)bigint_digit_at(a, i) 
+                    + (int)bigint_digit_at(b, i)   
+                    + carry;
+        result->digits[i] = (suma % 10); //copilot propone sumar un '0' para convertir a char, pero creo que es mejor dejarlo como int y convertir a char al imprimir
+        carry = suma / 10;
+    }
+
+    result->len = i;
+    return result;
+    }
 /* 
     Verifies if a string is a valid decimal integer representation
     Returns 1 if valid, 0 otherwise
@@ -82,7 +125,12 @@ int bigint_max_len(const Bigint *a, const Bigint *b); // EDU
     Returns a digit given its position. If the bigint lenght is exceded, returns 0
 */
 char bigint_digit_at(const Bigint *n, int pos); // IAN
-
+    {
+    if (pos < 0 || pos >= n->len) {
+        return 0;
+    }
+    return n->digits[pos];  
+    }
 
 // -- Main --
 int main(int argc, char* argv[]){
