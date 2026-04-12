@@ -235,6 +235,13 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         if (strcmp(command, "sumar") == 0) {
+            if (output->sign == -1 || new->sign == -1){
+                fprintf(stderr, "Error: La operacion 'sumar' no acepta parametros con signos negativos\n");
+                bigint_free(new);
+                bigint_free(output);
+                free(num_arguments);
+                return 1;
+            }
             Bigint *temp = bigint_add(output, new);
             bigint_free(output);
             if (temp == NULL){
