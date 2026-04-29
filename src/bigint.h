@@ -11,5 +11,8 @@ Bigint *bigint_new(const char *text);
 void bigint_print(const Bigint *n);
 void bigint_free(Bigint *n);
 Bigint *bigint_add(const Bigint *a, const Bigint *b);
+Bigint *bigint_sub(const Bigint *a, const Bigint *b);
+Bigint *bigint_mul(const Bigint *a, const Bigint *b);
 int bigint_max_len(const Bigint *a, const Bigint *b);
 char bigint_digit_at(const Bigint *n, int pos);
+int bigint_compare_abs(const Bigint *a, const Bigint *b);

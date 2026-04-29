@@ -13,7 +13,7 @@ int is_decimal_string(const char *text){
 
     for (int i = 0; i<strlen(text); i++){
         char val = text[i];
-        if (i == 0 && val == '-'){continue;} // If its negative
+        if (i == 0 && (val == '-' || val == '+')){continue;} // If its negative
 
         if (!(val >= '0' && val <= '9')){
             return 0;
