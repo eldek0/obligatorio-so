@@ -11,7 +11,7 @@ int is_decimal_string(const char *text){
         return 0;
     }
 
-    for (int i = 0; i<strlen(text); i++){
+    for (size_t i = 0; i<strlen(text); i++){
         char val = text[i];
         if (i == 0 && (val == '-' || val == '+')){continue;} // If its negative
 
